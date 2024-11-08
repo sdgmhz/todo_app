@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     # third party
     'crispy_forms',
 
+    'accounts.apps.AccountsConfig',
 ]
 
 MIDDLEWARE = [
@@ -129,3 +130,6 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 # crispy forms config
 CRISPY_TEMPLATES_PACK = 'bootstrap4'
 
+# custom user model config
+
+AUTH_USER_MODEL = 'accounts.CustomUser'
