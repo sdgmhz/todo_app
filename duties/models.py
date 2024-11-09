@@ -26,6 +26,6 @@ class Duty(models.Model):
         return self.title
     
     def get_absolute_url(self):
-        return reverse('post_detail', args=[self.id])
+        return reverse('duty_detail', args=[self.id])
 
 

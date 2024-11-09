@@ -8,7 +8,7 @@ Home
 {% block content %}
 <div class="container mt-3 " style="width: 40rem;">
     {% if user.is_authenticated %}
-    <h3>You can see your todo list <a class="text-decoration-none" href="*">here</a></h3>
+    <h3>You can see your todo list <a class="text-decoration-none" href="{% url 'duty_list' %}">here</a></h3>
     {% else %}
     <h3>In order to use this app, you should first <a class="text-decoration-none" href="{% url 'login' %}">login</a></h3>
     <h3>Don't have an account. <a class="text-decoration-none" href="{% url 'signup' %}">Signup</a> now!</h3>
