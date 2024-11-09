@@ -41,7 +41,9 @@ INSTALLED_APPS = [
     # third party
     'crispy_forms',
 
+    # local
     'accounts.apps.AccountsConfig',
+    'duties.apps.DutiesConfig',
 ]
 
 MIDDLEWARE = [
