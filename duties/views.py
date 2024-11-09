@@ -1,9 +1,10 @@
-from django.forms import BaseModelForm
-from django.http import HttpResponse
+
+from django.http import HttpResponseRedirect
 from django.shortcuts import get_object_or_404
-from django.urls import reverse_lazy
+from django.urls import reverse_lazy, reverse
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
+from django.views import View
 
 from .models import Duty
 from accounts.models import Profile
@@ -66,3 +67,28 @@ class DutyDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
     def test_func(self):
         profile = get_object_or_404(Profile, user=self.request.user)
         return self.get_object().author == profile
+    
+    
+
+class ChangeStatusView(LoginRequiredMixin, UserPassesTestMixin, View):
+    def get_object(self):
+        pk = self.kwargs.get("pk")
+        return get_object_or_404(Duty, pk=pk)
+    
+    def test_func(self):
+        profile = get_object_or_404(Profile, user=self.request.user)
+        return self.get_object().author == profile
+
+    def post(self, request, pk, *args, **kwargs):
+        duty = get_object_or_404(Duty, pk=pk)
+        profile = get_object_or_404(Profile, user=self.request.user)
+        if duty.author != profile:
+            return HttpResponseRedirect(reverse('403'))  
+        if duty.done_status == 'not':
+            duty.done_status = 'don'
+        else:
+            duty.done_status = 'not'
+        duty.save(update_fields=['done_status'])  
+
+        return HttpResponseRedirect(reverse('duty_list'))
+

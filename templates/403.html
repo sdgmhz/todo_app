@@ -1,0 +1,19 @@
+{% extends '_base.html' %}
+
+{% block page_title %}
+Access Denied
+
+{% endblock page_title %}
+
+{% block content %}
+<div class="container mt-3 " style="width: 40rem;">
+    <h1>You Don't have permission to do this act. Probably this object is not belong to you!</h1>
+    <h3>
+        <a class="text-decoration-none"href="{% url 'home' %}">come back to home</a>
+
+    </h3>
+ 
+</div>
+
+
+{% endblock content %}

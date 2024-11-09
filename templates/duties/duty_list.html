@@ -37,9 +37,16 @@ My Duties
                         {% endif %}
                     </h5>
                     <br>
-                    <div> <a class="btn btn-info" href="{{ duty.get_absolute_url }}">Read More</a>
+                    <div style="display: flex; gap: 10px;"> <a class="btn btn-info" href="{{ duty.get_absolute_url }}">Read More</a>
                         <a class="btn btn-warning" href="{% url 'duty_update' pk=duty.id %}">Edit</a>
                         <a class="btn btn-danger" href="{% url 'duty_delete' pk=duty.id %}">Delete</a>
+                        <!-- <a class="btn btn-danger" href="{% url 'change_status' pk=duty.id %}">Change Done Status</a> -->
+                        <form method="post" action="{% url 'change_status' pk=duty.id %}">
+                            {% csrf_token %}
+                            <button class="btn btn-danger" type="submit">Change Done Status</button>
+                        </form>
+
+                        
 
                     </div>
                     

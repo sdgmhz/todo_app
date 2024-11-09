@@ -26,6 +26,7 @@ urlpatterns = [
     path('duties/', include('duties.urls')),
     path('accounts/', include('accounts.urls')),
     path('accounts/', include('django.contrib.auth.urls')),
+    path('403/', TemplateView.as_view(template_name="403.html")),
     
 ]
 
