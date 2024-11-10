@@ -12,7 +12,7 @@ My Duties
 
 <div class="container mt-4">
     <div class="row">
-        {% for duty in duties%}
+        {% for duty in duties %}
         <div class="col-9">
             <div class="card shadow-sm my-3">
                 <div class="card-body">
@@ -67,9 +67,10 @@ My Duties
             </div>
         </div>
         {% endfor %}
+       
         <div class="col-3">
 
-                <div class="card my-4">
+                <div class="card my-4" style="position: fixed; top: 250px; width: 20%;">
                     <h5 class="card-header">Attention</h5>
                     <div class="card-body">
                         <p class="card-text">
@@ -85,7 +86,27 @@ My Duties
         </div>
     </div>
 </div>
+<div class="d-flex flex-column justify-content-end align-items-center full-height">
 
+    <!-- {{page_obj}} -->
+    <nav aria-label="Page navigation example">
+        <ul class="pagination">
+            {% if page_obj.has_previous %}
+            <li class="page-item"><a class="page-link" href="?page=1">First</a></li>
+          <li class="page-item"><a class="page-link" href="?page={{page_obj.previous_page_number}}">Previous</a></li>
+          {% endif %}
+          
+          <li class="page-item"><a class="page-link" href="#">{{page_obj.number}}</a></li>
+          
+            {% if page_obj.has_next %}
+          <li class="page-item"><a class="page-link" href="?page={{page_obj.next_page_number}}">Next</a></li>
+          <li class="page-item"><a class="page-link" href="?page={{page_obj.paginator.num_pages}}">Last</a></li>
+
+          {% endif %}
+        </ul>
+      </nav>
+
+</div>
 
 {% endblock content %}
 

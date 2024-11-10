@@ -13,11 +13,12 @@ from accounts.models import Profile
 class DutyListView(LoginRequiredMixin, ListView):
     model = Duty
     template_name = 'duties/duty_list.html'
+    paginate_by = 3
     context_object_name = 'duties'
     
     def get_queryset(self):
         profile = get_object_or_404(Profile, user=self.request.user)
-        return Duty.objects.filter(author=profile)
+        return Duty.objects.filter(author=profile).order_by('-updated_date')
 
 
 class DutyDetailView(LoginRequiredMixin, DetailView):
