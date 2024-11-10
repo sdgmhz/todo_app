@@ -1,6 +1,8 @@
 {% extends '_base.html' %}
+{% load humanize %}
 
 {% block page_title %}
+My Duties
 
 {% endblock page_title %}
 
@@ -10,30 +12,73 @@
 
 <div class="container mt-4">
     <div class="row">
+        {% for duty in duties %}
         <div class="col-9">
             <div class="card shadow-sm my-3">
                 <div class="card-body">
-                    <h5 class="card-title">Card title</h5>
-                    <h6 class="card-subtitle mb-2 text-muted small py-2">2 Sep 2021</h6>
+                    {% if duty.done_status == 'not' %}
+                    <h5 class="card-title"><a class="text-decoration-none" href="{{duty.get_absolute_url}}">{{ duty }}</a></h5>
+                    {% else %}
+                    <h5 class="card-title"><a class="text-decoration-none" href="{{duty.get_absolute_url}}"><del>{{ duty }}</del></a></h5>
+                    {% endif %}
+                    <h5 class="card-title">Deadline: {{ duty.deadline_date|naturalday}}</h5>
+
+                    <h6 class="card-subtitle mb-2 text-muted small py-2">Date of creation : {{ duty.created_date|naturalday }}</h6>
+                    <h6 class="card-subtitle mb-2 text-muted small py-2">Last edit: {{ duty.updated_date|naturalday }}</h6>
+                    
+
+
                     <p class="card-text py-3">
-                        Some quick example text to build on the card title and make up the bulk of the card's content.
-                        Some quick example text to build on the card title and make up the bulk of the card's content.
-                        Some quick example text to build on the card title and make up the bulk of the card's content.
+                        {{ duty.description|truncatewords:10 }}
                     </p>
-                    <div class="btn btn-sm btn-success">Read More</div>
+                    <h5 class="card-title">Done Status:  
+                        {% if duty.done_status == 'not' %}
+                        <span style="color: red;">Not Done Yet!</span>     
+                        {% else %} <span style="color: blue;">Done!</span>
+                        {% endif %}
+
+                        
+
+                        {% now "Y-m-d" as todays_date %}
+                        {% if duty.done_status == 'not' and todays_date > duty.deadline_date|date:"Y-m-d" %}
+                        <p style="color: red;">Deadline is over!</p>
+                        {% elif duty.done_status == 'not' %}
+                            <p style="color: blue;">The deadline has not expired yet.</p>
+                        {% endif %}
+                    
+                    </h5>
+                    <br>
+                    <div style="display: flex; gap: 10px;"> <a class="btn btn-info" href="{{ duty.get_absolute_url }}">Read More</a>
+                        <a class="btn btn-warning" href="{% url 'duty_update' pk=duty.id %}">Edit</a>
+                        <a class="btn btn-danger" href="{% url 'duty_delete' pk=duty.id %}">Delete</a>
+                        <!-- <a class="btn btn-danger" href="{% url 'change_status' pk=duty.id %}">Change Done Status</a> -->
+                        <form method="post" action="{% url 'change_status' pk=duty.id %}">
+                            {% csrf_token %}
+                            <button class="btn btn-danger" type="submit">Change Done Status</button>
+                        </form>
+
+                        
+
+                    </div>
+                    
+
+
                 </div>
             </div>
         </div>
+        {% endfor %}
+       
         <div class="col-3">
 
-                <div class="card my-4">
-                    <h5 class="card-header">About</h5>
+                <div class="card my-4" style="position: fixed; top: 250px; width: 20%;">
+                    <h5 class="card-header">Attention</h5>
                     <div class="card-body">
-                        <p class="card-text">We love python and django. So we created a blog site to share our
-                            thoughts</p>
-                        <a href="#"
+                        <p class="card-text">
+                            This ToDo list is belong to {{request.user.email}}. If you are not {{request.user.email}}, please log out.
+                        </p>
+                        <a href="{% url 'logout' %}"
                            class="btn btn-sm btn-danger">
-                            More...
+                            Log Out
                         </a>
                     </div>
                 </div>
@@ -41,7 +86,27 @@
         </div>
     </div>
 </div>
+<div class="d-flex flex-column justify-content-end align-items-center full-height">
 
+    <!-- {{page_obj}} -->
+    <nav aria-label="Page navigation example">
+        <ul class="pagination">
+            {% if page_obj.has_previous %}
+            <li class="page-item"><a class="page-link" href="?page=1">First</a></li>
+          <li class="page-item"><a class="page-link" href="?page={{page_obj.previous_page_number}}">Previous</a></li>
+          {% endif %}
+          
+          <li class="page-item"><a class="page-link" href="#">{{page_obj.number}}</a></li>
+          
+            {% if page_obj.has_next %}
+          <li class="page-item"><a class="page-link" href="?page={{page_obj.next_page_number}}">Next</a></li>
+          <li class="page-item"><a class="page-link" href="?page={{page_obj.paginator.num_pages}}">Last</a></li>
+
+          {% endif %}
+        </ul>
+      </nav>
+
+</div>
 
 {% endblock content %}
 

@@ -21,8 +21,8 @@
         </button>
         <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
             <div class="navbar-nav">
-                <a class="nav-link active" aria-current="page" href="#">My duties</a>
-                <a class="nav-link active" href="#">Create a new duty</a>
+                <a class="nav-link active" aria-current="page" href="{% url 'duty_list' %}">My duties</a>
+                <a class="nav-link active" href="{% url 'duty_create' %}">Create a new duty</a>
             </div>
         </div>
         {% if user.is_authenticated %}
@@ -37,8 +37,8 @@
 <div class="container-fluid bg-info">
     <div class="row py-3">
         <div class="col-md-8 col-md-10 mx-auto">
-            <h3 class="my-4 mt-3 text-white">Welcome to Python and Django Blog</h3>
-            <p class="text-light">We share python and django tips and tricks here</p>
+            <h3 class="my-4 mt-3 text-white">Welcome to ToDo app created by Django</h3>
+            <p class="text-light">With this app you can define duties for yourself and specify a deadline for them!</p>
         </div>
     </div>
 </div>

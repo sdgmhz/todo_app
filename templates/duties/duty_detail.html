@@ -1,10 +1,80 @@
 {% extends '_base.html' %}
+{% load humanize %}
 
 {% block page_title %}
+
+{{duty}}
 
 {% endblock page_title %}
 
 {% block content %}
+
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-9">
+
+            <div class="card shadow my-3 p-5">
+                {% if duty.done_status == 'not' %}
+                <h1>{{duty}}</h1>
+               
+                {% else %}
+                <h1><del>{{duty}}</del></h1>
+                {% endif %}
+                <h5 class="card-title">Deadline: {{ duty.deadline_date|naturalday }}</h5>
+                <p class="small text-muted mt-2">By: {{ duty.author }}</p>
+                <p class="small text-muted mt-2">Date of creation : {{ duty.created_date|naturalday }}</p>
+                <p class="small text-muted mt-2">Last edit: {{ duty.updated_date|naturalday }}</p>
+                
+                <p class="mt-2">{{ duty.description }}</p>
+                <h5 class="card-title">Done Status:  
+                    {% if duty.done_status == 'not' %}
+                    <span style="color: red;">Not Done Yet!</span>
+                       
+                    {% else %} <span style="color: blue;">Done!</span>
+                    {% endif %}
+                    {% now "Y-m-d" as todays_date %}
+                        {% if duty.done_status == 'not' and todays_date > duty.deadline_date|date:"Y-m-d" %}
+                        <p style="color: red;">Deadline is over!</p>
+                        {% elif duty.done_status == 'not' %}
+                            <p style="color: blue;">The deadline has not expired yet.</p>
+                        {% endif %}
+                </h5>
+                <div style="display: flex; gap: 10px;"> 
+                    <a class="btn btn-warning" href="{% url 'duty_update' pk=duty.id %}">Edit</a>
+                    <a class="btn btn-danger" href="{% url 'duty_delete' pk=duty.id %}">Delete</a>
+                    <a class="btn btn-info" href="{% url 'duty_list' %}">Go Back to my Duties</a>
+                    <form method="post" action="{% url 'change_status' pk=duty.id %}">
+                        {% csrf_token %}
+                        <button class="btn btn-danger" type="submit">Change Done Status</button>
+                    </form>
+    
+                </div>
+
+            </div>
+            
+        
+           
+            
+        </div>
+        <div class="col-3">
+
+                <div class="card my-4">
+                    <h5 class="card-header">Attention:</h5>
+                    <div class="card-body">
+                        <p class="card-text">
+                            This ToDo job is belong to {{request.user.email}}. If you are not {{request.user.email}}, please log out.
+                            </p>
+                        <a href="{% url "logout" %}"
+                           class="btn btn-sm btn-danger">
+                            Log Out
+                        </a>
+                    </div>
+                </div>
+
+        </div>
+    </div>
+</div>
+
 
 
 {% endblock content %}

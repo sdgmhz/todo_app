@@ -1,10 +1,18 @@
 {% extends '_base.html' %}
+{% load crispy_forms_tags %}
 
 {% block page_title %}
+
 
 {% endblock page_title %}
 
 {% block content %}
+<h3>Are you sure you want to delete {{duty}}?!</h3>
+<form action="" method="post">
+    {% csrf_token %}
+    <button type="submit" class="btn btn-danger">Yes, delete</button> <a class="btn btn-secondary" href="{% url 'duty_list' %}">Cancel</a>
+</form>
+
 
 
 {% endblock content %}

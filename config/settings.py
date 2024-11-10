@@ -37,11 +37,14 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django.contrib.humanize',
 
     # third party
     'crispy_forms',
 
+    # local
     'accounts.apps.AccountsConfig',
+    'duties.apps.DutiesConfig',
 ]
 
 MIDDLEWARE = [
