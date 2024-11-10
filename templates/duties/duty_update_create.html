@@ -7,11 +7,14 @@ Create or Update a duty
 {% endblock page_title %}
 
 {% block content %}
-<form action="" method="post">
-    {% csrf_token %}
-    {{form|crispy}}
-    <button class="btn btn-success mt-3" type="submit">Create & Update</button>
-</form>
+<div class="container mt-3 " style="width: 40rem;">
+    <form action="" method="post">
+        {% csrf_token %}
+        {{form|crispy}}
+        <button class="btn btn-success mt-3" type="submit">Create & Update</button>
+    </form>
+
+</div>
 
 
 {% endblock content %}

@@ -1,4 +1,5 @@
 {% extends '_base.html' %}
+{% load humanize %}
 
 {% block page_title %}
 My Duties
@@ -20,10 +21,10 @@ My Duties
                     {% else %}
                     <h5 class="card-title"><a class="text-decoration-none" href="{{duty.get_absolute_url}}"><del>{{ duty }}</del></a></h5>
                     {% endif %}
-                    <h5 class="card-title">Deadline: {{ duty.deadline_date }}</h5>
+                    <h5 class="card-title">Deadline: {{ duty.deadline_date|naturalday}}</h5>
 
-                    <h6 class="card-subtitle mb-2 text-muted small py-2">Date of creation : {{ duty.created_date }}</h6>
-                    <h6 class="card-subtitle mb-2 text-muted small py-2">Last edit: {{ duty.updated_date }}</h6>
+                    <h6 class="card-subtitle mb-2 text-muted small py-2">Date of creation : {{ duty.created_date|naturalday }}</h6>
+                    <h6 class="card-subtitle mb-2 text-muted small py-2">Last edit: {{ duty.updated_date|naturalday }}</h6>
                     
 
 
@@ -32,9 +33,19 @@ My Duties
                     </p>
                     <h5 class="card-title">Done Status:  
                         {% if duty.done_status == 'not' %}
-                        <span style="color: red;">Not Done Yet!</span>
+                        <span style="color: red;">Not Done Yet!</span>     
                         {% else %} <span style="color: blue;">Done!</span>
                         {% endif %}
+
+                        
+
+                        {% now "Y-m-d" as todays_date %}
+                        {% if duty.done_status == 'not' and todays_date > duty.deadline_date|date:"Y-m-d" %}
+                        <p style="color: red;">Deadline is over!</p>
+                        {% elif duty.done_status == 'not' %}
+                            <p style="color: blue;">The deadline has not expired yet.</p>
+                        {% endif %}
+                    
                     </h5>
                     <br>
                     <div style="display: flex; gap: 10px;"> <a class="btn btn-info" href="{{ duty.get_absolute_url }}">Read More</a>

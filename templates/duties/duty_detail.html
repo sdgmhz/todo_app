@@ -1,4 +1,5 @@
 {% extends '_base.html' %}
+{% load humanize %}
 
 {% block page_title %}
 
@@ -15,20 +16,28 @@
             <div class="card shadow my-3 p-5">
                 {% if duty.done_status == 'not' %}
                 <h1>{{duty}}</h1>
+               
                 {% else %}
                 <h1><del>{{duty}}</del></h1>
                 {% endif %}
-                <h5 class="card-title">Deadline: {{ duty.deadline_date }}</h5>
+                <h5 class="card-title">Deadline: {{ duty.deadline_date|naturalday }}</h5>
                 <p class="small text-muted mt-2">By: {{ duty.author }}</p>
-                <p class="small text-muted mt-2">Date of creation : {{ duty.created_date }}</p>
-                <p class="small text-muted mt-2">Last edit: {{ duty.updated_date }}</p>
+                <p class="small text-muted mt-2">Date of creation : {{ duty.created_date|naturalday }}</p>
+                <p class="small text-muted mt-2">Last edit: {{ duty.updated_date|naturalday }}</p>
                 
                 <p class="mt-2">{{ duty.description }}</p>
                 <h5 class="card-title">Done Status:  
                     {% if duty.done_status == 'not' %}
                     <span style="color: red;">Not Done Yet!</span>
+                       
                     {% else %} <span style="color: blue;">Done!</span>
                     {% endif %}
+                    {% now "Y-m-d" as todays_date %}
+                        {% if duty.done_status == 'not' and todays_date > duty.deadline_date|date:"Y-m-d" %}
+                        <p style="color: red;">Deadline is over!</p>
+                        {% elif duty.done_status == 'not' %}
+                            <p style="color: blue;">The deadline has not expired yet.</p>
+                        {% endif %}
                 </h5>
                 <div style="display: flex; gap: 10px;"> 
                     <a class="btn btn-warning" href="{% url 'duty_update' pk=duty.id %}">Edit</a>
