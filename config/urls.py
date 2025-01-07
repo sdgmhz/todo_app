@@ -20,6 +20,8 @@ from django.conf  import settings
 from django.conf.urls.static import static
 from django.views.generic.base import TemplateView
 
+from rest_framework.documentation import include_docs_urls
+
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', TemplateView.as_view(template_name="home.html"), name='home'),
@@ -28,6 +30,9 @@ urlpatterns = [
     path('accounts/', include('django.contrib.auth.urls')),
     path('403/', TemplateView.as_view(template_name="403.html")),
     path('api-auth/', include('rest_framework.urls')),
+
+    path('api/', TemplateView.as_view(template_name="doc.html"), name='api-docs'),
+    path('api-docs/', include_docs_urls(title='api sample doc')),
     
 ]
 
