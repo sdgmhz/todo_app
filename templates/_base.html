@@ -23,6 +23,8 @@
             <div class="navbar-nav">
                 <a class="nav-link active" aria-current="page" href="{% url 'duty_list' %}">My duties</a>
                 <a class="nav-link active" href="{% url 'duty_create' %}">Create a new duty</a>
+                <a class="nav-link active" href="{% url 'api-v1:api-root' %}">API Section</a>
+
             </div>
         </div>
         {% if user.is_authenticated %}

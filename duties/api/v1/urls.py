@@ -1,6 +1,12 @@
+from rest_framework.routers import DefaultRouter
 from django.urls import path
-from .views import *
+from . import views
 
-urlpatterns = [
-    path('', test_view, name='test')
-]
+app_name = 'api-v1'
+
+""" create a router for duty urls"""
+router = DefaultRouter()
+router.register('duty', views.DutyModelViewSet, basename='duty')
+urlpatterns = router.urls
+
+
