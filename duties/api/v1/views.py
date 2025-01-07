@@ -4,10 +4,11 @@ from rest_framework.permissions import IsAuthenticatedOrReadOnly
 
 from .serializer import DutyModelSerializer
 from ...models import Duty
+from .permissions import IsOwner
 
 """model viewset for implement CRUD for duties"""
 class DutyModelViewSet(viewsets.ModelViewSet):
-    permission_classes = [IsAuthenticatedOrReadOnly]
+    permission_classes = [IsAuthenticatedOrReadOnly, IsOwner]
     serializer_class = DutyModelSerializer
     
     
