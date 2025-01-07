@@ -27,5 +27,8 @@ class Duty(models.Model):
     
     def get_absolute_url(self):
         return reverse('duty_detail', args=[self.id])
+    
+    def get_snippet(self):
+        return ' ' .join(self.description.split()[:3]) + '...'
 
 

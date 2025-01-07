@@ -41,6 +41,8 @@ INSTALLED_APPS = [
 
     # third party
     'crispy_forms',
+    'django_filters',
+    'rest_framework',
 
     # local
     'accounts.apps.AccountsConfig',
