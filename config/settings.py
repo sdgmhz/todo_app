@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     'crispy_forms',
     'django_filters',
     'rest_framework',
+    'drf_yasg',
 
     # local
     'accounts.apps.AccountsConfig',
@@ -148,4 +149,8 @@ LOGIN_REDIRECT_URL = 'home'
 LOGOUT_REDIRECT_URL = 'home'
 
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+
+REST_FRAMEWORK = {
+    'DEFAULT_SCHEMA_CLASS': 'rest_framework.schemas.coreapi.AutoSchema',
+}
 
