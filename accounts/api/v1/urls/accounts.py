@@ -30,6 +30,9 @@ urlpatterns = [
     # verify jwt
     path('jwt/verify/', TokenVerifyView.as_view(), name="jwt-verify"),
 
+    # test
+    path('test-email/',views.TestEmailSend.as_view(), name="test-email"),
+
     
 
 ]
