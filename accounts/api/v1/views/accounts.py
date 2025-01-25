@@ -1,9 +1,9 @@
 from rest_framework import generics
-from .serializers import (RegistrationSerializer,
+from ..serializers import (RegistrationSerializer,
                         CustomAuthTokenSerializer,
                         CustomTokenObtainPairSerializer,
                         ChangePasswordSerializer,
-                        ProfileSerializer) 
+                        ) 
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.authtoken.views import ObtainAuthToken
@@ -11,8 +11,7 @@ from rest_framework.authtoken.models import Token
 from rest_framework.views import APIView
 from rest_framework.permissions import IsAuthenticated
 from rest_framework_simplejwt.views import TokenObtainPairView
-from ...models import Profile
-from django.shortcuts import get_object_or_404
+
 
 ''' registration view '''
 class RegistrationApiView(generics.GenericAPIView):
@@ -62,7 +61,7 @@ class ChangePasswordApiView(generics.GenericAPIView):
 
     def put(self, request, *args, **kwargs):
         self.object = self.request.user
-        serializer = self.serializer_class(data=request.data)
+        serializer = self.serializer_class(data=request.data, context={'user':request.user})
         if serializer.is_valid():
             # check if the old password is entered correctly
             if not self.object.check_password(serializer.data.get("old_password")):
@@ -73,17 +72,6 @@ class ChangePasswordApiView(generics.GenericAPIView):
             return Response({"detail": "password changed successfully"}, status=status.HTTP_200_OK)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     
-# profile view
-class ProfileApiView(generics.RetrieveUpdateAPIView):
-    serializer_class = ProfileSerializer
-    permission_classes =[IsAuthenticated]
-    queryset = Profile.objects.all()
-
-    def get_object(self):
-        queryset = self.get_queryset()
-        obj = get_object_or_404(queryset, user=self.request.user)
-        return obj
-
     
     
     

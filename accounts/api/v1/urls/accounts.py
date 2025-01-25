@@ -1,5 +1,5 @@
 from django.urls import path
-from . import views
+from .. import views
 from rest_framework_simplejwt.views import (
     TokenObtainPairView,
     TokenRefreshView,
@@ -30,8 +30,7 @@ urlpatterns = [
     # verify jwt
     path('jwt/verify/', TokenVerifyView.as_view(), name="jwt-verify"),
 
-    # profile
-    path('profile/', views.ProfileApiView.as_view(), name="profile"),
+    
 
 ]
 
