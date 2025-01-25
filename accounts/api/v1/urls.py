@@ -1,5 +1,10 @@
 from django.urls import path
 from . import views
+from rest_framework_simplejwt.views import (
+    TokenObtainPairView,
+    TokenRefreshView,
+    TokenVerifyView
+)
 
 
 urlpatterns = [
@@ -14,6 +19,14 @@ urlpatterns = [
     # logout token
     path('token/logout/', views.CustomDiscardAuthToken.as_view(), name="token-logout"),
     
-    # login jwt
+    # create jwt
+    path('jwt/create/', views.CustomTokenObtainPairView.as_view(), name="jwt-create"),
+
+    # refresh jwt
+    path('jwt/refresh/', TokenRefreshView.as_view(), name="jwt-refresh"),
+
+    # verify jwt
+    path('jwt/verify/', TokenVerifyView.as_view(), name="jwt-verify"),
+
 ]
 
