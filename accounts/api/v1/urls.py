@@ -30,5 +30,8 @@ urlpatterns = [
     # verify jwt
     path('jwt/verify/', TokenVerifyView.as_view(), name="jwt-verify"),
 
+    # profile
+    path('profile/', views.ProfileApiView.as_view(), name="profile"),
+
 ]
 
