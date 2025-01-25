@@ -1,5 +1,5 @@
 from rest_framework import generics
-from .serializers import RegistrationSerializer, CustomAuthTokenSerializer, CustomTokenObtainPairSerializer
+from .serializers import RegistrationSerializer, CustomAuthTokenSerializer, CustomTokenObtainPairSerializer, ChangePasswordSerializer 
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.authtoken.views import ObtainAuthToken
@@ -48,6 +48,25 @@ class CustomDiscardAuthToken(APIView):
 # customizing jwt creating view in order to override serializer
 class CustomTokenObtainPairView(TokenObtainPairView):
     serializer_class = CustomTokenObtainPairSerializer
+
+# change password view
+class ChangePasswordApiView(generics.GenericAPIView):
+    serializer_class = ChangePasswordSerializer
+    permission_classes = [IsAuthenticated]
+
+    def put(self, request, *args, **kwargs):
+        self.object = self.request.user
+        serializer = self.serializer_class(data=request.data)
+        if serializer.is_valid():
+            # check if the old password is entered correctly
+            if not self.object.check_password(serializer.data.get("old_password")):
+                return Response({"detail": "old password is wrong"}, status=status.HTTP_400_BAD_REQUEST)
+            # set the new password
+            self.object.set_password(serializer.data.get("new_password"))
+            self.object.save()
+            return Response({"detail": "password changed successfully"}, status=status.HTTP_200_OK)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    
     
 
 
