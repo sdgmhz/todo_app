@@ -18,6 +18,7 @@ class RegistrationSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = ['email', 'password', 'password1']
+
     ''' overriding validation method '''
     def validate(self, attrs):
         if attrs.get('password') != attrs.get('password1'):
@@ -27,6 +28,7 @@ class RegistrationSerializer(serializers.ModelSerializer):
         except exceptions.ValidationError as e:
             raise serializers.ValidationError({'password': list(e.messages)})
         return super().validate(attrs)
+    
     ''' create user '''
     def create(self, validated_data):
         validated_data.pop('password1', None)
@@ -112,6 +114,20 @@ class ChangePasswordSerializer(serializers.Serializer):
         return super().validate(attrs)
     
 
+# a serializer for both activation email resend and password reset link
+class ActivationResendAndPasswordResetSerializer(serializers.Serializer):
+    email = serializers.EmailField(required=True)
 
-class ActivationResendSerializer(serializers.Serializer):
-    email = serializers.EmailField()
+
+class PasswordResetConfirmSerializer(serializers.Serializer):
+    new_password = serializers.CharField(required=True)
+    new_password1 = serializers.CharField(required=True)
+
+    def validate(self, attrs):
+        if attrs.get("new_password") != attrs.get("new_password1"):
+            raise serializers.ValidationError({"detail": "passwords don't match!"})
+        try:
+            validate_password(attrs.get("new_password"))
+        except exceptions.ValidationError as e:
+            raise serializers.ValidationError({'password': list(e.messages)})
+        return super().validate(attrs)

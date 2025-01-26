@@ -3,7 +3,8 @@ from ..serializers import (RegistrationSerializer,
                         CustomAuthTokenSerializer,
                         CustomTokenObtainPairSerializer,
                         ChangePasswordSerializer,
-                        ActivationResendSerializer,
+                        ActivationResendAndPasswordResetSerializer,
+                        PasswordResetConfirmSerializer,
                         ) 
 from rest_framework.response import Response
 from rest_framework import status
@@ -118,9 +119,9 @@ class ActivationApiView(APIView):
         return Response({"detail": "Your account has been verified and activated successfully"}, status=status.HTTP_200_OK)
 
 
-    
+# resend activation link view    
 class ActivationResendApiView(generics.GenericAPIView):
-    serializer_class = ActivationResendSerializer
+    serializer_class = ActivationResendAndPasswordResetSerializer
 
     def post(self, request, *args, **kwargs):
         serializer = self.serializer_class(data=request.data)
@@ -149,5 +150,83 @@ class ActivationResendApiView(generics.GenericAPIView):
         return str(refresh.access_token)
         
 
+# send password reset link view
+class PasswordResetApiView(generics.GenericAPIView):
+    serializer_class = ActivationResendAndPasswordResetSerializer
+
+    def post(self, request, *args, **kwargs):
+        serializer = self.serializer_class(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        email = serializer.validated_data["email"]
+        try:
+            user_obj = User.objects.get(email=email)
+        except User.DoesNotExist:
+           # according to security considerations, we will not tell the user if there is no account associated with this email or not!!
+            return Response({"detail": "If there is an account with this email, we will send an password reset link for you. Check your inbox!"}, status=status.HTTP_200_OK)
+        if user_obj.is_verified:
+            token = self.get_tokens_for_user(user_obj)
+            email_obj = EmailMessage('email/password_reset_email.tpl',
+                                        {'token':token, 'email': email},
+                                        'admin@admin.com',
+                                        to=[email],
+                                        )
+
+            EmailThread(email_obj).start()
+           # according to security considerations, we will not tell the user if there is no account associated with this email or not!!
+            return Response({"detail": "If there is an account with this email, we will send an password reset link for you. Check your inbox!"}, status=status.HTTP_200_OK)
+        return Response({"detail": "Your account is not verified. First you should request for user verification. "}, status=status.HTTP_400_BAD_REQUEST)
+    
+        # this method creates access token for user
+    def get_tokens_for_user(self, user):
+        refresh = RefreshToken.for_user(user)
+
+        return str(refresh.access_token)
+    
+
+class PasswordResetConfirmApiView(generics.GenericAPIView):
+    serializer_class = PasswordResetConfirmSerializer
+    
+    def get(self, request, token, *args, **kwargs):
+        try:
+            # decode token and find the user_id
+            token = decode(token, settings.SECRET_KEY, algorithms=["HS256"])
+            user_id = token.get("user_id")
+        except ExpiredSignatureError:
+            return Response({"detail": "token has been expired"}, status=status.HTTP_400_BAD_REQUEST)
+        except DecodeError:
+            return Response({"detail": "token is invalid"}, status=status.HTTP_400_BAD_REQUEST)
+        # find user
+        user_obj = User.objects.get(pk=user_id)
+        return Response({"detail": f"Password reset for user: {user_obj.email}"}, status=status.HTTP_200_OK)
+                        
+    
+    def put(self, request, token, *args, **kwargs):
+        try:
+            # decode token and find the user_id
+            token = decode(token, settings.SECRET_KEY, algorithms=["HS256"])
+            user_id = token.get("user_id")
+        except ExpiredSignatureError:
+            return Response({"detail": "token has been expired"}, status=status.HTTP_400_BAD_REQUEST)
+        except DecodeError:
+            return Response({"detail": "token is invalid"}, status=status.HTTP_400_BAD_REQUEST)
+        # find user for resetting password
+        user_obj = User.objects.get(pk=user_id)
+        serializer = self.serializer_class(data=request.data)
+        if serializer.is_valid():
+           
+            # set the new password
+            user_obj.set_password(serializer.data.get("new_password"))
+            user_obj.save()
+            return Response({"detail": f"password reset successfully for user:{user_obj.email}"}, status=status.HTTP_200_OK)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    
+    
+    
+    
+        
 
         
+        
+
+
+ 

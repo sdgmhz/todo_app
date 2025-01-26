@@ -7,14 +7,15 @@ from rest_framework_simplejwt.views import (
 )
 
 
+
 urlpatterns = [
+
     # registration
     path('registration/', views.RegistrationApiView.as_view(), name='registration'),
 
     # change password
     path('change-password/', views.ChangePasswordApiView.as_view(), name="change-password"),
 
-    # reset password
     # login token
     path('token/login/', views.CustomObtainAuthToken.as_view(), name='token-login'),
     
@@ -34,9 +35,14 @@ urlpatterns = [
     path('activation/confirm/<str:token>/', views.ActivationApiView.as_view(), name='activation'),
 
     # activation resend
-    path('active/resend/', views.ActivationResendApiView.as_view(), name='activation-resend'),
+    path('activation/resend/', views.ActivationResendApiView.as_view(), name='activation-resend'),
+
+    # password reset request
+    path('password/reset/',views.PasswordResetApiView.as_view(), name='password-reset'),
+
+    # password reset confirm
+    path('password/reset/confirm/<str:token>/', views.PasswordResetConfirmApiView.as_view(), name="password-reset-confirm"),
 
     
-
 ]
 
