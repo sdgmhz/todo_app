@@ -8,9 +8,10 @@ class ProfileSerializer(serializers.ModelSerializer):
     class Meta:
         model = Profile
         fields=["id", "email", "first_name", "last_name"]
-
+    # check if user is verified or not. this is necessary in patch and put
     def validate(self, attrs):
-        if not self.user.is_verified:
+        user = self.context.get("user")
+        if not user.is_verified:
             raise serializers.ValidationError(
                 {"detail": "user is not verified"}
             )

@@ -112,3 +112,6 @@ class ChangePasswordSerializer(serializers.Serializer):
         return super().validate(attrs)
     
 
+
+class ActivationResendSerializer(serializers.Serializer):
+    email = serializers.EmailField()
