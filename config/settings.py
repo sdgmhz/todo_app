@@ -38,6 +38,7 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     "django.contrib.humanize",
+    
     # third party
     "crispy_forms",
     "django_filters",
@@ -46,6 +47,7 @@ INSTALLED_APPS = [
     "rest_framework.authtoken",
     "rest_framework_simplejwt",
     "mail_templated",
+    
     # local
     "accounts.apps.AccountsConfig",
     "duties.apps.DutiesConfig",
