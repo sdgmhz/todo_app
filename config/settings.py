@@ -38,7 +38,6 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     "django.contrib.humanize",
-    
     # third party
     "crispy_forms",
     "django_filters",
@@ -47,7 +46,6 @@ INSTALLED_APPS = [
     "rest_framework.authtoken",
     "rest_framework_simplejwt",
     "mail_templated",
-    
     # local
     "accounts.apps.AccountsConfig",
     "duties.apps.DutiesConfig",
@@ -160,6 +158,7 @@ EMAIL_HOST = "smtp4dev"
 EMAIL_HOST_USER = ""
 EMAIL_HOST_PASSWORD = ""
 EMAIL_PORT = 25
+
 
 REST_FRAMEWORK = {
     "DEFAULT_SCHEMA_CLASS": "rest_framework.schemas.coreapi.AutoSchema",
