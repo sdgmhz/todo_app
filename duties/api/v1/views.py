@@ -6,7 +6,6 @@ from rest_framework.filters import SearchFilter, OrderingFilter
 
 from .serializer import DutyModelSerializer
 from ...models import Duty
-from .permissions import IsOwner
 from .paginations import DutyPagination
 
 """model viewset for implement CRUD for duties"""
