@@ -176,7 +176,10 @@ class ActivationResendApiView(generics.GenericAPIView):
                 {"detail": "user activation email resend successfully"},
                 status=status.HTTP_200_OK,
             )
-        return Response({"detail": "your account has already been verified"})
+        return Response(
+            {"detail": "your account has already been verified"},
+            status=status.HTTP_406_NOT_ACCEPTABLE,
+        )
 
         # this method creates access token for user
 
