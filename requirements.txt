@@ -15,6 +15,7 @@ djangorestframework==3.15.2
 djangorestframework-simplejwt==5.1.0
 drf-yasg==1.21.8
 exceptiongroup==1.2.2
+Faker==35.2.0
 flake8==7.1.1
 idna==3.10
 importlib_resources==6.4.5
@@ -37,11 +38,13 @@ pyflakes==3.2.0
 PyJWT==2.9.0
 pytest==8.3.4
 pytest-django==4.9.0
+python-dateutil==2.9.0.post0
 pytz==2024.2
 PyYAML==6.0.2
 referencing==0.35.1
 requests==2.32.3
 rpds-py==0.20.1
+six==1.17.0
 sqlparse==0.5.1
 swagger-spec-validator==3.0.4
 tomli==2.2.1

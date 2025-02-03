@@ -110,7 +110,9 @@ class TestDutyApi:
         assert response.status_code == 401
 
     # test that an authorized user is able to edit a duty by put method
-    def test_update_duty_detail_response_200_status_by_put(self, api_client, common_duty):
+    def test_update_duty_detail_response_200_status_by_put(
+        self, api_client, common_duty
+    ):
         url = reverse("api-v1:duty-detail", kwargs={"pk": common_duty.id})
         data = {
             "title": "test2",
@@ -135,7 +137,9 @@ class TestDutyApi:
         assert response.status_code == 401
 
     # test that an authorized user is able to edit a duty by patch method
-    def test_update_duty_detail_response_200_status_by_patch(self, api_client, common_duty):
+    def test_update_duty_detail_response_200_status_by_patch(
+        self, api_client, common_duty
+    ):
         url = reverse("api-v1:duty-detail", kwargs={"pk": common_duty.id})
         data = {
             "title": "test2",
