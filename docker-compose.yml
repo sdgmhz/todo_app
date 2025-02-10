@@ -29,6 +29,16 @@ services:
     depends_on:
       - redis
       - backend
+  
+  beat:
+    build: .
+    command: celery -A config beat --loglevel=info
+    volumes:
+      - .:/code/
+    depends_on:
+      - backend
+      - redis
+      - worker
 
   smtp4dev:
     image: rnwood/smtp4dev:v3

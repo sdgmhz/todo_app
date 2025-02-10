@@ -172,4 +172,4 @@ REST_FRAMEWORK = {
 
 
 # celery config
-CELERY_BROKER_URL = 'redis://redis:6379/1'
+CELERY_BROKER_URL = "redis://redis:6379/1"
