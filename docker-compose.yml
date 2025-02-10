@@ -5,6 +5,7 @@ services:
   redis:
     container_name: redis
     image: redis
+    restart: always
     ports:
       - "6379:6379"
     command: redis-server --save 60 1 --loglevel warning
@@ -17,6 +18,17 @@ services:
       - 8000:8000
     volumes:
       - .:/code/
+    depends_on:
+      - redis
+
+  worker:
+    build: .
+    command: celery -A config worker --loglevel=info
+    volumes:
+      - .:/code/
+    depends_on:
+      - redis
+      - backend
 
   smtp4dev:
     image: rnwood/smtp4dev:v3
