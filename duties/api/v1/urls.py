@@ -10,5 +10,6 @@ router.register("duty", views.DutyModelViewSet, basename="duty")
 urlpatterns = router.urls
 
 urlpatterns += [
-    path('weather/', views.WeatherCacheApiView.as_view(), name='weather'),
+    # weather caching endpoint
+    path("weather/", views.WeatherCacheApiView.as_view(), name="weather"),
 ]
