@@ -10,5 +10,8 @@ exclude =
     settings.py,
     __init__.py
 
+ignore =
+    E402
+
 
 max-line-length = 200
