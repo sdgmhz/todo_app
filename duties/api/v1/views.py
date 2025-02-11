@@ -1,7 +1,11 @@
-from rest_framework import viewsets
+from rest_framework import viewsets, status
 from rest_framework.permissions import IsAuthenticatedOrReadOnly
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.filters import SearchFilter, OrderingFilter
+from django.utils.decorators import method_decorator
+from django.views.decorators.cache import cache_page
+from rest_framework.response import Response
+from rest_framework.views import APIView
 
 
 from .serializer import DutyModelSerializer
@@ -25,3 +29,11 @@ class DutyModelViewSet(viewsets.ModelViewSet):
 
     # def get_queryset(self):
     #     return Duty.objects.filter(author__user__id=self.request.user.id)
+
+
+class WeatherCacheApiView(APIView):
+
+    @method_decorator(cache_page(60))
+    def get(self, request):
+        data = {"message": "this Is tEst"}
+        return Response(data, status=status.HTTP_200_OK)
