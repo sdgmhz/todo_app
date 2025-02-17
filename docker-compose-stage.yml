@@ -1,0 +1,46 @@
+version: '3.9'
+
+services:
+
+  redis:
+    container_name: redis
+    image: redis
+    restart: always
+    ports:
+      - "6379:6379"
+    command: redis-server --save 60 1 --loglevel warning
+
+  backend:
+    container_name: backend
+    build: .
+    command: sh -c "python manage.py makemigrations && python manage.py migrate && python manage.py collectstatic --noinput && gunicorn config.wsgi --bind 0.0.0.0:8000"
+    ports:
+      - 8000:8000
+    volumes:
+      - .:/code/
+    environment:
+      - SECRET_KEY=django-insecure-uieuov63yqk)h381itkiz@lpsfy-6(1&r%k6=#(5xg=^w2h4ka
+      - DEBUG=False
+      # - ALLOWED_HOSTS=*
+    depends_on:
+      - redis
+
+  worker:
+    build: .
+    command: sh -c "pip install django-redis && celery -A config worker --loglevel=info"
+    volumes:
+      - .:/code/
+    depends_on:
+      - redis
+      - backend
+  
+  beat:
+    build: .
+    command: celery -A config beat --loglevel=info
+    volumes:
+      - .:/code/
+    depends_on:
+      - backend
+      - redis
+      - worker
+
