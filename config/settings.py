@@ -158,11 +158,13 @@ LOGOUT_REDIRECT_URL = "home"
 
 # email send config
 EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
-EMAIL_USE_TLS = False
-EMAIL_HOST = "smtp4dev"
-EMAIL_HOST_USER = ""
-EMAIL_HOST_PASSWORD = ""
-EMAIL_PORT = 25
+EMAIL_HOST = "smtp.gmail.com"
+EMAIL_PORT = 587
+EMAIL_HOST_USER = 'django.smtp.email.test@gmail.com'
+EMAIL_HOST_PASSWORD = 'xstj rkic qcdx ewiy'
+EMAIL_USE_TLS = True
+EMAIL_USE_SSL = False
+
 
 
 REST_FRAMEWORK = {
