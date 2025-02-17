@@ -18,6 +18,8 @@ services:
       - 8000
     volumes:
       - .:/code/
+      - static_volume:/code/static
+      - media_volume:/code/media
     environment:
       - SECRET_KEY=django-insecure-uieuov63yqk)h381itkiz@lpsfy-6(1&r%k6=#(5xg=^w2h4ka
       - DEBUG=False
@@ -34,6 +36,7 @@ services:
       - redis
       - backend
   
+  # implement celery in docker compose
   beat:
     build: .
     command: celery -A config beat --loglevel=info
@@ -52,8 +55,13 @@ services:
       - 80:80
     volumes:
       - ./default.conf:/etc/nginx/conf.d/default.conf
+      - static_volume:/home/code/static
+      - media_volume:/home/code/media
     depends_on:
       - redis
       - backend
-    
+
+volumes:
+  static_volume:
+  media_volume:    
 
