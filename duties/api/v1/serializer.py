@@ -68,3 +68,13 @@ class DutyModelSerializer(serializers.ModelSerializer):
             user__id=self.context.get("request").user.id
         )
         return super().create(validated_data)
+
+
+# serializer to get the latitude and longitude of the desired location
+class WeatherSerializer(serializers.Serializer):
+    latitude = serializers.DecimalField(
+        decimal_places=2, max_digits=5
+    )  # between +90 and -90
+    longitude = serializers.DecimalField(
+        decimal_places=2, max_digits=6
+    )  # between +180 and -180

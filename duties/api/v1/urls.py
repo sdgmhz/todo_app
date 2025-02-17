@@ -1,5 +1,6 @@
 from rest_framework.routers import DefaultRouter
 from . import views
+from django.urls import path
 
 app_name = "api-v1"
 
@@ -7,3 +8,8 @@ app_name = "api-v1"
 router = DefaultRouter()
 router.register("duty", views.DutyModelViewSet, basename="duty")
 urlpatterns = router.urls
+
+urlpatterns += [
+    # weather caching endpoint
+    path("weather/", views.WeatherCacheApiView.as_view(), name="weather"),
+]

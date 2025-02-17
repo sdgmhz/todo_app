@@ -23,7 +23,7 @@ services:
 
   worker:
     build: .
-    command: celery -A config worker --loglevel=info
+    command: sh -c "pip install django-redis && celery -A config worker --loglevel=info"
     volumes:
       - .:/code/
     depends_on:
