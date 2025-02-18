@@ -69,3 +69,5 @@ zipp==3.20.2
 
 python-decouple
 gunicorn
+
+psycopg2-binary

@@ -2,6 +2,18 @@ version: '3.9'
 
 services:
 
+  db:
+    image: postgres:latest
+    environment:
+      - POSTGRES_DB=mydatabase
+      - POSTGRES_USER=myuser
+      - POSTGRES_PASSWORD=mypassword
+    ports:
+      - 5432:5432
+    volumes:
+      - postgres_data:/var/lib/postgresql/data/
+
+
   redis:
     container_name: redis
     image: redis
@@ -10,10 +22,11 @@ services:
       - "6379:6379"
     command: redis-server --save 60 1 --loglevel warning
 
+
   backend:
     container_name: backend
     build: .
-    command: sh -c "python manage.py makemigrations && python manage.py migrate && python manage.py collectstatic --noinput && gunicorn config.wsgi --bind 0.0.0.0:8000"
+    command: sh -c "python manage.py migrate && python manage.py loaddata --exclude contenttypes data.json && gunicorn config.wsgi --bind 0.0.0.0:8000"
     expose:
       - 8000
     volumes:
@@ -24,8 +37,15 @@ services:
       - SECRET_KEY=django-insecure-uieuov63yqk)h381itkiz@lpsfy-6(1&r%k6=#(5xg=^w2h4ka
       - DEBUG=False
       # - ALLOWED_HOSTS=*
+      - DB_HOST=db
+      - DB_NAME=mydatabase
+      - DB_USER=myuser
+      - DB_PASSWORD=mypassword
+      
     depends_on:
       - redis
+      - db
+
 
   worker:
     build: .
@@ -61,7 +81,9 @@ services:
       - redis
       - backend
 
+
 volumes:
   static_volume:
-  media_volume:    
+  media_volume:
+  postgres_data:    
 
