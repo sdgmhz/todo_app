@@ -38,5 +38,5 @@ jobs:
         script: |
           cd ${{secrets.PROJECT_PATH}}
           docker-compose -f docker-compose-stage.yml stop
-          git pull
+          git pull origin staging
           docker-compose -f docker-compose-stage.yml restart
