@@ -7,5 +7,5 @@ Account Activation
 {% block html %}
 dear user : {{ email }}<br>
 here is your account activation url:<br>
-http://127.0.0.1/accounts/api/v1/activation/confirm/{{ token }}/
+http://185.226.118.52/accounts/api/v1/activation/confirm/{{ token }}/
 {% endblock %}
